@@ -1,15 +1,127 @@
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* =====================
+   LIGHT THEME (default)
+   white + blue + orange
+===================== */
+:root,
+[data-theme="light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f1f5f9;
+  --bg-card: #ffffff;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+
+  --navbar-bg: #1e3a8a;
+  --navbar-text: #ffffff;
+  --navbar-text-muted: #bfdbfe;
+  --navbar-hover-bg: rgba(255, 255, 255, 0.12);
+  --navbar-border: rgba(255, 255, 255, 0.1);
+
+  --accent: #f97316;
+  --accent-hover: #ea580c;
+  --accent-light: #fff7ed;
+
+  --blue: #1e3a8a;
+  --blue-light: #3b82f6;
+  --blue-bg: #eff6ff;
+
+  --border: #e2e8f0;
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
+
+  /* Section alternating background */
+  --section-alt-bg: #eef2ff;
+  --section-alt-gradient: linear-gradient(160deg, #dbeafe 0%, #eff6ff 50%, #dbeafe 100%);
+
+  /* Card theming */
+  --card-surface: #ffffff;
+  --card-border-color: #dbeafe;
+  --card-shadow-lg: 0 20px 50px rgba(30, 58, 138, 0.12);
+  --card-active-shadow: 0 25px 60px rgba(30, 58, 138, 0.2), 0 0 30px rgba(249, 115, 22, 0.12);
+
+  /* Text on colored/section backgrounds */
+  --section-heading: #1e3a8a;
+  --section-subtext: #64748b;
+  --section-muted: #94a3b8;
+
+  /* Nav/slider controls */
+  --ctrl-bg: rgba(30, 58, 138, 0.08);
+  --ctrl-border: rgba(30, 58, 138, 0.2);
+  --ctrl-color: #1e3a8a;
+  --dot-inactive: #cbd5e1;
+
+  /* Hero overlay — light theme: blue-tinted, slightly lighter */
+  --hero-overlay: linear-gradient(
+    135deg,
+    rgba(10, 25, 80, 0.70) 0%,
+    rgba(5, 10, 50, 0.60) 50%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* =====================
+   DARK THEME
+   black + blue + orange
+===================== */
+[data-theme="dark"] {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-card: #1e293b;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  --navbar-bg: #060d1f;
+  --navbar-text: #f1f5f9;
+  --navbar-text-muted: #93c5fd;
+  --navbar-hover-bg: rgba(255, 255, 255, 0.08);
+  --navbar-border: rgba(255, 255, 255, 0.08);
+
+  --accent: #f97316;
+  --accent-hover: #fb923c;
+  --accent-light: #1c1007;
+
+  --blue: #3b82f6;
+  --blue-light: #60a5fa;
+  --blue-bg: #0f172a;
+
+  --border: #334155;
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.5);
+
+  /* Section alternating background */
+  --section-alt-bg: #0a1628;
+  --section-alt-gradient: linear-gradient(160deg, #0a1628 0%, #0f2a5e 50%, #0a1628 100%);
+
+  /* Card theming */
+  --card-surface: rgba(255, 255, 255, 0.06);
+  --card-border-color: rgba(255, 255, 255, 0.1);
+  --card-shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.5);
+  --card-active-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(249, 115, 22, 0.15);
+
+  /* Text on colored/section backgrounds */
+  --section-heading: #ffffff;
+  --section-subtext: rgba(255, 255, 255, 0.55);
+  --section-muted: rgba(255, 255, 255, 0.35);
+
+  /* Nav/slider controls */
+  --ctrl-bg: rgba(255, 255, 255, 0.08);
+  --ctrl-border: rgba(255, 255, 255, 0.15);
+  --ctrl-color: #ffffff;
+  --dot-inactive: rgba(255, 255, 255, 0.25);
+
+  /* Hero overlay — dark theme: very dark */
+  --hero-overlay: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.88) 0%,
+    rgba(5, 10, 40, 0.80) 50%,
+    rgba(0, 0, 0, 0.75) 100%
+  );
 }
 
+/* =====================
+   BASE STYLES
+===================== */
 html {
   height: 100%;
 }
@@ -24,11 +136,12 @@ body {
   min-height: 100%;
   display: flex;
   flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
+  color: var(--text-primary);
+  background: var(--bg-primary);
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 * {
@@ -40,10 +153,4 @@ body {
 a {
   color: inherit;
   text-decoration: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
 }
