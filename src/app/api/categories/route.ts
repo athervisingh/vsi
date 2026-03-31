@@ -1,8 +1,8 @@
 import { NextRequest } from 'next/server'
-import { createServerClient } from '@/lib/supabase-server'
+import { createAdminClient } from '@/lib/supabase-server'
 
 export async function GET(_req: NextRequest) {
-  const supabase = createServerClient()
+  const supabase = createAdminClient()
   const { data, error } = await supabase
     .from('categories')
     .select('id, parent_id, name, slug, image_url, is_active')

@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server'
-import { createServerClient } from '@/lib/supabase-server'
+import { createAdminClient } from '@/lib/supabase-server'
 
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl
@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
   const limit = Math.min(Number(searchParams.get('limit') ?? 20), 100)
   const offset = Number(searchParams.get('offset') ?? 0)
 
-  const supabase = createServerClient()
+  const supabase = createAdminClient()
 
   let query = supabase
     .from('products')

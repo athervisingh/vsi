@@ -6,7 +6,7 @@ import type { Product } from "@/components/shared/productGrid/ProductGrid";
 import type { FeaturedProduct } from "@/components/homepagecomponents/topThree/TopThree";
 
 async function getCategories(): Promise<Category[]> {
-  const supabase = createServerClient();
+  const supabase = await createServerClient();
   const { data } = await supabase
     .from("categories")
     .select("id, parent_id, name, slug, image_url, is_active")
@@ -16,13 +16,14 @@ async function getCategories(): Promise<Category[]> {
 }
 
 async function getFeaturedProducts(): Promise<FeaturedProduct[]> {
-  const supabase = createServerClient();
+  const supabase = await createServerClient();
   const { data } = await supabase
     .from("products")
     .select(`
       id, name, slug, description, base_price, brand,
       categories(name),
-      product_images(url, is_primary, sort_order)
+      product_images(url, is_primary, sort_order),
+      product_variants(id, is_active)
     `)
     .eq("is_active", true)
     .eq("is_featured", true)
@@ -41,17 +42,19 @@ async function getFeaturedProducts(): Promise<FeaturedProduct[]> {
       p.product_images?.find((img: any) => img.is_primary)?.url ||
       p.product_images?.[0]?.url ||
       "/placeholder.png",
+    default_variant_id: p.product_variants?.find((v: any) => v.is_active)?.id,
   }));
 }
 
 async function getNewArrivals(): Promise<Product[]> {
-  const supabase = createServerClient();
+  const supabase = await createServerClient();
   const { data } = await supabase
     .from("products")
     .select(`
       id, name, slug, base_price, brand,
       categories(name),
-      product_images(url, is_primary, sort_order)
+      product_images(url, is_primary, sort_order),
+      product_variants(id, is_active)
     `)
     .eq("is_active", true)
     .eq("is_new_arrival", true)
@@ -73,17 +76,19 @@ async function getNewArrivals(): Promise<Product[]> {
     reviews: 0,
     badge: "New",
     badgeColor: "blue" as const,
+    default_variant_id: p.product_variants?.find((v: any) => v.is_active)?.id,
   }));
 }
 
 async function getBestSellers(): Promise<Product[]> {
-  const supabase = createServerClient();
+  const supabase = await createServerClient();
   const { data } = await supabase
     .from("products")
     .select(`
       id, name, slug, base_price, brand,
       categories(name),
-      product_images(url, is_primary, sort_order)
+      product_images(url, is_primary, sort_order),
+      product_variants(id, is_active)
     `)
     .eq("is_active", true)
     .eq("is_best_seller", true)
@@ -105,11 +110,12 @@ async function getBestSellers(): Promise<Product[]> {
     reviews: 0,
     badge: "Hot",
     badgeColor: "red" as const,
+    default_variant_id: p.product_variants?.find((v: any) => v.is_active)?.id,
   }));
 }
 
 async function getCategoriesWithProducts(): Promise<CategoryWithProducts[]> {
-  const supabase = createServerClient();
+  const supabase = await createServerClient();
 
   const { data: categories } = await supabase
     .from("categories")
@@ -125,7 +131,8 @@ async function getCategoriesWithProducts(): Promise<CategoryWithProducts[]> {
         .from("products")
         .select(`
           id, name, slug, base_price, brand, description,
-          product_images(url, is_primary, sort_order)
+          product_images(url, is_primary, sort_order),
+          product_variants(id, is_active)
         `)
         .eq("category_id", cat.id)
         .eq("is_active", true)
@@ -146,6 +153,7 @@ async function getCategoriesWithProducts(): Promise<CategoryWithProducts[]> {
           reviews: 120,
           badge: "New",
           badgeColor: "blue" as const,
+          default_variant_id: p.product_variants?.find((v: any) => v.is_active)?.id,
         })),
       };
     })

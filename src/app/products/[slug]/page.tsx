@@ -10,7 +10,7 @@ type Props = {
 
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
-  const supabase = createServerClient();
+  const supabase = await createServerClient();
 
   // Fetch product with all relations
   const { data: product, error } = await supabase

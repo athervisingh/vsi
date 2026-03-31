@@ -1,10 +1,10 @@
 import { NextRequest } from 'next/server'
-import { createServerClient } from '@/lib/supabase-server'
+import { createAdminClient } from '@/lib/supabase-server'
 
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl
   const category = searchParams.get('category')
-  const supabase = createServerClient()
+  const supabase = createAdminClient()
 
   let query = supabase
     .from('services')

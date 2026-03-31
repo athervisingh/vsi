@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import styles from "./topThree.module.css";
 
@@ -15,6 +16,7 @@ export type FeaturedProduct = {
   brand: string | null;
   category_name: string;
   image: string;
+  default_variant_id?: string;
 };
 
 type Props = {
@@ -23,6 +25,7 @@ type Props = {
 
 export default function TopThree({ products }: Props) {
   const { addToCart } = useCart();
+  const router = useRouter();
   const [activeIndex, setActiveIndex] = useState(0);
 
   if (!products.length) return null;
@@ -109,8 +112,12 @@ export default function TopThree({ products }: Props) {
                       className={styles.addCartBtn}
                       onClick={(e) => {
                         e.stopPropagation();
+                        if (!product.default_variant_id) {
+                          router.push(`/products/${product.slug}`);
+                          return;
+                        }
                         addToCart({
-                          variant_id: product.id,
+                          variant_id: product.default_variant_id,
                           product_id: product.id,
                           product_name: product.name,
                           price: product.base_price,

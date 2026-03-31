@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import styles from "./categoryProductsSection.module.css";
 import type { Product } from "@/components/shared/productGrid/ProductGrid";
@@ -73,13 +74,18 @@ export default function CategoryProductsSection({ categoryProducts }: Props) {
 /* ─── Product Card ──── */
 function ProductCard({ product }: { product: Product }) {
   const { addToCart } = useCart();
+  const router = useRouter();
 
   function handleAddToCart(e: React.MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
+    if (!product.default_variant_id) {
+      router.push(`/products/${product.slug}`);
+      return;
+    }
     addToCart({
-      variant_id: String(product.id),
-      product_id: String(product.id),
+      variant_id: product.default_variant_id,
+      product_id: product.id,
       product_name: product.name,
       price: product.price,
       image: product.image,

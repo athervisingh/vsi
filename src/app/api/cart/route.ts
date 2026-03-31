@@ -1,11 +1,11 @@
 import { NextRequest } from 'next/server'
-import { createServerClient } from '@/lib/supabase-server'
+import { createAdminClient } from '@/lib/supabase-server'
 
 export async function GET(req: NextRequest) {
   const userId = req.headers.get('x-user-id')
   if (!userId) return Response.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const supabase = createServerClient()
+  const supabase = createAdminClient()
   const { data, error } = await supabase
     .from('cart_items')
     .select(`
@@ -32,9 +32,8 @@ export async function POST(req: NextRequest) {
 
   if (!variant_id) return Response.json({ error: 'variant_id required' }, { status: 400 })
 
-  const supabase = createServerClient()
+  const supabase = createAdminClient()
 
-  // Upsert: if same variant exists, increase quantity
   const { data: existing } = await supabase
     .from('cart_items')
     .select('id, quantity')
@@ -61,4 +60,60 @@ export async function POST(req: NextRequest) {
 
   if (error) return Response.json({ error: error.message }, { status: 500 })
   return Response.json({ data }, { status: 201 })
+}
+
+export async function PATCH(req: NextRequest) {
+  const userId = req.headers.get('x-user-id')
+  if (!userId) return Response.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const body = await req.json()
+  const { cart_item_id, quantity } = body
+
+  if (!cart_item_id || quantity == null) {
+    return Response.json({ error: 'cart_item_id and quantity required' }, { status: 400 })
+  }
+
+  const supabase = createAdminClient()
+  const { data, error } = await supabase
+    .from('cart_items')
+    .update({ quantity })
+    .eq('id', cart_item_id)
+    .eq('user_id', userId)
+    .select()
+    .single()
+
+  if (error) return Response.json({ error: error.message }, { status: 500 })
+  return Response.json({ data })
+}
+
+export async function DELETE(req: NextRequest) {
+  const userId = req.headers.get('x-user-id')
+  if (!userId) return Response.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const { searchParams } = req.nextUrl
+  const cart_item_id = searchParams.get('cart_item_id')
+  const clear = searchParams.get('clear')
+
+  const supabase = createAdminClient()
+
+  // clear=true means signout — delete all items for this user
+  if (clear === 'true') {
+    const { error } = await supabase
+      .from('cart_items')
+      .delete()
+      .eq('user_id', userId)
+    if (error) return Response.json({ error: error.message }, { status: 500 })
+    return Response.json({ success: true })
+  }
+
+  if (!cart_item_id) return Response.json({ error: 'cart_item_id required' }, { status: 400 })
+
+  const { error } = await supabase
+    .from('cart_items')
+    .delete()
+    .eq('id', cart_item_id)
+    .eq('user_id', userId)
+
+  if (error) return Response.json({ error: error.message }, { status: 500 })
+  return Response.json({ success: true })
 }

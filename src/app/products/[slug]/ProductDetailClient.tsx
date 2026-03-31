@@ -88,8 +88,9 @@ export default function ProductDetailClient({
   const discount = Math.round(((originalPrice - finalPrice) / originalPrice) * 100);
 
   function handleAddToCart() {
+    if (!finalVariant) return;
     addToCart({
-      variant_id: finalVariant?.id ?? product.id,
+      variant_id: finalVariant.id,
       product_id: product.id,
       product_name: product.name,
       price: finalPrice,
@@ -255,6 +256,7 @@ export default function ProductDetailClient({
           <button
             className={`${styles.addToCartBtn} ${added ? styles.addedBtn : ""}`}
             onClick={handleAddToCart}
+            disabled={!finalVariant}
           >
             {added ? (
               <><CheckMark /> Added to Cart</>

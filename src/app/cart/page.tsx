@@ -33,7 +33,7 @@ export default function CartPage() {
           {/* Cart Items */}
           <div className={styles.itemsList}>
             {items.map((item) => (
-              <div key={item.variant_id} className={styles.cartItem}>
+              <div key={item.cart_item_id} className={styles.cartItem}>
                 <div className={styles.itemImage}>
                   <Image src={item.image} alt={item.product_name} fill sizes="80px" style={{ objectFit: "cover", borderRadius: 8 }} />
                 </div>
@@ -47,20 +47,20 @@ export default function CartPage() {
                   <div className={styles.qtyRow}>
                     <button
                       className={styles.qtyBtn}
-                      onClick={() => updateQuantity(item.variant_id, item.quantity - 1)}
+                      onClick={() => updateQuantity(item.cart_item_id, item.quantity - 1)}
                       aria-label="Decrease quantity"
                     >−</button>
                     <span className={styles.qtyNum}>{item.quantity}</span>
                     <button
                       className={styles.qtyBtn}
-                      onClick={() => updateQuantity(item.variant_id, item.quantity + 1)}
+                      onClick={() => updateQuantity(item.cart_item_id, item.quantity + 1)}
                       aria-label="Increase quantity"
                     >+</button>
                   </div>
                   <p className={styles.itemTotal}>₹{(item.price * item.quantity).toLocaleString("en-IN")}</p>
                   <button
                     className={styles.removeBtn}
-                    onClick={() => removeFromCart(item.variant_id)}
+                    onClick={() => removeFromCart(item.cart_item_id)}
                     aria-label="Remove item"
                   >
                     <TrashIcon />

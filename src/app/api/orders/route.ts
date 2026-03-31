@@ -1,11 +1,11 @@
 import { NextRequest } from 'next/server'
-import { createServerClient } from '@/lib/supabase-server'
+import { createAdminClient } from '@/lib/supabase-server'
 
 export async function GET(req: NextRequest) {
   const userId = req.headers.get('x-user-id')
   if (!userId) return Response.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const supabase = createServerClient()
+  const supabase = createAdminClient()
   const { data, error } = await supabase
     .from('orders')
     .select(`
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
 
   if (!items?.length) return Response.json({ error: 'items required' }, { status: 400 })
 
-  const supabase = createServerClient()
+  const supabase = createAdminClient()
 
   // Calculate totals
   const subtotal: number = items.reduce(

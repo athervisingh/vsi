@@ -12,7 +12,7 @@ type CategoryWithProducts = {
 };
 
 async function getAllCategoriesWithProducts(): Promise<CategoryWithProducts[]> {
-  const supabase = createServerClient();
+  const supabase = await createServerClient();
 
   const { data: categories } = await supabase
     .from("categories")

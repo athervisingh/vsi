@@ -2,12 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import styles from "./productGrid.module.css";
 
 /* ─── Types ──────────────────────────────────────────── */
 export type Product = {
-  id: number;
+  id: string;
   name: string;
   category: string;
   image: string;
@@ -18,6 +19,7 @@ export type Product = {
   badge?: string;
   badgeColor?: "orange" | "blue" | "green" | "red";
   slug: string;
+  default_variant_id?: string;
 };
 
 type Props = {
@@ -65,13 +67,18 @@ export default function ProductGrid({
 /* ─── Product Card ───────────────────────────────────── */
 function ProductCard({ product }: { product: Product }) {
   const { addToCart } = useCart();
+  const router = useRouter();
 
   function handleAddToCart(e: React.MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
+    if (!product.default_variant_id) {
+      router.push(`/products/${product.slug}`);
+      return;
+    }
     addToCart({
-      variant_id: String(product.id),
-      product_id: String(product.id),
+      variant_id: product.default_variant_id,
+      product_id: product.id,
       product_name: product.name,
       price: product.price,
       image: product.image,

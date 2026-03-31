@@ -1,11 +1,11 @@
 import { NextRequest } from 'next/server'
-import { createServerClient } from '@/lib/supabase-server'
+import { createAdminClient } from '@/lib/supabase-server'
 
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl
   const limit = Math.min(Number(searchParams.get('productsPerCategory') ?? 8), 50)
 
-  const supabase = createServerClient()
+  const supabase = createAdminClient()
 
   // Get all active parent categories
   const { data: categories, error: catError } = await supabase
@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
 
   // For each category, fetch its products
   const categoriesWithProducts = await Promise.all(
-    categories.map(async (cat) => {
+    categories.map(async (cat: (typeof categories)[number]) => {
       const { data: products } = await supabase
         .from('products')
         .select(`

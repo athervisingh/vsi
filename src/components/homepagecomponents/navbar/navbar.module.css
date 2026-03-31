@@ -326,6 +326,216 @@
 }
 
 /* =====================
+   PROFILE DROPDOWN
+===================== */
+
+.profileWrapper {
+  position: relative;
+}
+
+.profileBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px 5px 5px;
+  border-radius: 30px;
+  background-color: var(--navbar-hover-bg);
+  border: 1px solid var(--navbar-border);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  color: var(--navbar-text-muted);
+}
+
+.profileBtn:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.profileDropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 220px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  z-index: 1001;
+  overflow: hidden;
+  animation: dropIn 0.18s ease;
+}
+
+@keyframes dropIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.dropdownOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+}
+
+.dropdownHeader {
+  padding: 14px 16px 12px;
+  background: var(--bg-secondary);
+}
+
+.dropdownName {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 2px;
+}
+
+.dropdownEmail {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dropdownDivider {
+  height: 1px;
+  background: var(--border);
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: background 0.15s;
+}
+
+.dropdownItem:hover {
+  background: var(--bg-secondary);
+}
+
+.dropdownBadge {
+  margin-left: auto;
+  background: var(--accent);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.dropdownSignOut {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #ef4444;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.dropdownSignOut:hover {
+  background: #fef2f2;
+}
+
+/* =====================
+   MOBILE USER
+===================== */
+
+.mobileUserRow {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mobileUserInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 0;
+}
+
+.mobileUserName {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--navbar-text);
+  margin: 0;
+}
+
+.mobileUserEmail {
+  font-size: 12px;
+  color: var(--navbar-text-muted);
+  margin: 0;
+}
+
+.mobileUserLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mobileSignOutBtn {
+  display: block;
+  width: 100%;
+  padding: 13px 24px;
+  text-align: left;
+  font-size: 15px;
+  font-weight: 500;
+  color: #ef4444;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.mobileSignOutBtn:hover {
+  background-color: var(--navbar-hover-bg);
+}
+
+.mobileAuthBtns {
+  display: flex;
+  gap: 10px;
+  flex: 1;
+}
+
+.mobileSignupBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 20px;
+  background-color: transparent;
+  color: var(--navbar-text);
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid var(--navbar-border);
+  text-decoration: none;
+  flex: 1;
+  transition: background-color 0.2s ease;
+}
+
+.mobileSignupBtn:hover {
+  background-color: var(--navbar-hover-bg);
+}
+
+.mobileMeta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+/* =====================
    HAMBURGER
 ===================== */
 

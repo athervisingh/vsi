@@ -9,7 +9,7 @@ type Props = {
 
 export default async function CategoryPage({ params }: Props) {
   const { slug } = await params;
-  const supabase = createServerClient();
+  const supabase = await createServerClient();
 
   // Fetch category
   const { data: category } = await supabase

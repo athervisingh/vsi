@@ -1,12 +1,12 @@
 import { NextRequest } from 'next/server'
-import { createServerClient } from '@/lib/supabase-server'
+import { createAdminClient } from '@/lib/supabase-server'
 
 export async function GET(
   _req: NextRequest,
   ctx: RouteContext<'/api/products/[id]'>
 ) {
   const { id } = await ctx.params
-  const supabase = createServerClient()
+  const supabase = createAdminClient()
 
   const { data, error } = await supabase
     .from('products')
