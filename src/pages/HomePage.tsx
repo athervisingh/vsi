@@ -3,9 +3,11 @@ import TopThree from "@/components/homepagecomponents/topThree/TopThree";
 import CategoryGrid from "@/components/shared/categoryGrid/CategoryGrid";
 import OffersSection from "@/components/shared/offersSection/OffersSection";
 import ProductGrid from "@/components/shared/productGrid/ProductGrid";
+import CategoryProductsSection from "@/components/homepagecomponents/categoryProductsSection/CategoryProductsSection";
 import type { Offer } from "@/components/shared/offersSection/OffersSection";
 import type { Product } from "@/components/shared/productGrid/ProductGrid";
 import type { Category } from "@/types";
+import type { CategoryWithProducts } from "@/components/homepagecomponents/categoryProductsSection/CategoryProductsSection";
 
 const homeOffers: Offer[] = [
   {
@@ -62,9 +64,10 @@ const bestSellers: Product[] = [
 
 type Props = {
   categories: Category[];
+  categoryProducts?: CategoryWithProducts[];
 };
 
-export default function HomePage({ categories }: Props) {
+export default function HomePage({ categories, categoryProducts }: Props) {
   return (
     <main>
       <Hero />
@@ -91,6 +94,11 @@ export default function HomePage({ categories }: Props) {
         viewAllLink="/products?sort=bestsellers"
         products={bestSellers}
       />
+
+      {/* ── Category Products with Alternating Layout ── */}
+      {categoryProducts && categoryProducts.length > 0 && (
+        <CategoryProductsSection categoryProducts={categoryProducts} />
+      )}
     </main>
   );
 }
