@@ -3,56 +3,29 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useCart } from "@/context/CartContext";
 import styles from "./topThree.module.css";
 
-// TODO: Replace with API/DB call later
-const products = [
-  {
-    id: 1,
-    name: "Pro Cricket Bat",
-    category: "Cricket",
-    price: 2499,
-    originalPrice: 2999,
-    rating: 4.8,
-    reviews: 124,
-    image: "/bat.png",
-    badge: "Best Seller",
-    badgeType: "orange",
-    description: "Premium English willow bat crafted for professional players. Perfect grip, balanced weight.",
-    slug: "pro-cricket-bat",
-  },
-  {
-    id: 2,
-    name: "Match Football",
-    category: "Football",
-    price: 1299,
-    originalPrice: 1599,
-    rating: 4.6,
-    reviews: 89,
-    image: "/football.png",
-    badge: "Top Rated",
-    badgeType: "blue",
-    description: "FIFA approved match ball engineered for all weather conditions and professional play.",
-    slug: "match-football",
-  },
-  {
-    id: 3,
-    name: "Pro Skate Board",
-    category: "Skating",
-    price: 3499,
-    originalPrice: 4299,
-    rating: 4.7,
-    reviews: 67,
-    image: "/skate.png",
-    badge: "New Arrival",
-    badgeType: "green",
-    description: "High-performance skateboard built for tricks, street skating and aggressive riders.",
-    slug: "pro-skate-board",
-  },
-];
+export type FeaturedProduct = {
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  base_price: number;
+  brand: string | null;
+  category_name: string;
+  image: string;
+};
 
-export default function TopThree() {
+type Props = {
+  products: FeaturedProduct[];
+};
+
+export default function TopThree({ products }: Props) {
+  const { addToCart } = useCart();
   const [activeIndex, setActiveIndex] = useState(0);
+
+  if (!products.length) return null;
 
   const prev = () => setActiveIndex((i) => (i - 1 + products.length) % products.length);
   const next = () => setActiveIndex((i) => (i + 1) % products.length);
@@ -88,6 +61,9 @@ export default function TopThree() {
         <div className={styles.stage}>
           {products.map((product, index) => {
             const pos = getPosition(index);
+            const originalPrice = Math.round(product.base_price * 1.25);
+            const discount = Math.round(((originalPrice - product.base_price) / originalPrice) * 100);
+
             return (
               <div
                 key={product.id}
@@ -95,8 +71,8 @@ export default function TopThree() {
                 onClick={() => pos !== "active" && setActiveIndex(index)}
               >
                 {/* Badge */}
-                <span className={`${styles.badge} ${styles[`badge_${product.badgeType}`]}`}>
-                  {product.badge}
+                <span className={`${styles.badge} ${styles.badge_orange}`}>
+                  {product.brand ?? "Featured"}
                 </span>
 
                 {/* Product Image */}
@@ -114,35 +90,44 @@ export default function TopThree() {
 
                 {/* Card Info */}
                 <div className={styles.cardInfo}>
-                  <span className={styles.category}>{product.category}</span>
+                  <span className={styles.category}>{product.category_name}</span>
                   <h3 className={styles.productName}>{product.name}</h3>
-                  <p className={styles.description}>{product.description}</p>
-
-                  {/* Rating */}
-                  <div className={styles.ratingRow}>
-                    <div className={styles.stars}>
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <StarIcon key={i} filled={i < Math.round(product.rating)} />
-                      ))}
-                    </div>
-                    <span className={styles.ratingText}>
-                      {product.rating} ({product.reviews})
-                    </span>
-                  </div>
+                  <p className={styles.description}>
+                    {product.description ?? "Premium quality sports equipment for athletes."}
+                  </p>
 
                   {/* Price */}
                   <div className={styles.priceRow}>
-                    <span className={styles.price}>₹{product.price.toLocaleString()}</span>
-                    <span className={styles.originalPrice}>₹{product.originalPrice.toLocaleString()}</span>
-                    <span className={styles.discount}>
-                      {Math.round((1 - product.price / product.originalPrice) * 100)}% OFF
-                    </span>
+                    <span className={styles.price}>₹{product.base_price.toLocaleString("en-IN")}</span>
+                    <span className={styles.originalPrice}>₹{originalPrice.toLocaleString("en-IN")}</span>
+                    <span className={styles.discount}>{discount}% OFF</span>
                   </div>
 
                   {/* CTA */}
-                  <Link href={`/products/${product.slug}`} className={styles.ctaBtn}>
-                    View Product
-                  </Link>
+                  <div className={styles.ctaRow}>
+                    <button
+                      className={styles.addCartBtn}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        addToCart({
+                          variant_id: product.id,
+                          product_id: product.id,
+                          product_name: product.name,
+                          price: product.base_price,
+                          image: product.image,
+                        });
+                      }}
+                    >
+                      <CartIcon /> Add to Cart
+                    </button>
+                    <Link
+                      href={`/products/${product.slug}`}
+                      className={styles.ctaBtn}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      View Product
+                    </Link>
+                  </div>
                 </div>
               </div>
             );
@@ -191,10 +176,11 @@ function ChevronRight() {
   );
 }
 
-function StarIcon({ filled }: { filled: boolean }) {
+function CartIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill={filled ? "#f97316" : "none"} stroke="#f97316" strokeWidth="2">
-      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
+      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
     </svg>
   );
 }

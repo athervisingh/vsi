@@ -8,6 +8,7 @@ import type { Offer } from "@/components/shared/offersSection/OffersSection";
 import type { Product } from "@/components/shared/productGrid/ProductGrid";
 import type { Category } from "@/types";
 import type { CategoryWithProducts } from "@/components/homepagecomponents/categoryProductsSection/CategoryProductsSection";
+import type { FeaturedProduct } from "@/components/homepagecomponents/topThree/TopThree";
 
 const homeOffers: Offer[] = [
   {
@@ -48,30 +49,20 @@ const homeOffers: Offer[] = [
   },
 ];
 
-const newArrivals: Product[] = [
-  { id: 1, name: "Pro English Willow Bat", category: "Cricket", image: "/bat.png", price: 2499, originalPrice: 2999, rating: 4.8, reviews: 124, badge: "New", badgeColor: "blue", slug: "pro-english-willow-bat" },
-  { id: 2, name: "FIFA Match Football", category: "Football", image: "/football.png", price: 1299, originalPrice: 1599, rating: 4.6, reviews: 89, badge: "Best Seller", badgeColor: "orange", slug: "fifa-match-football" },
-  { id: 3, name: "Pro Skateboard Deck", category: "Skating", image: "/skate.png", price: 3499, originalPrice: 4299, rating: 4.7, reviews: 67, badge: "Trending", badgeColor: "green", slug: "pro-skateboard-deck" },
-  { id: 4, name: "Tournament Cricket Ball", category: "Cricket", image: "/bat.png", price: 599, originalPrice: 799, rating: 4.5, reviews: 201, badge: undefined, badgeColor: undefined, slug: "tournament-cricket-ball" },
-];
-
-const bestSellers: Product[] = [
-  { id: 5, name: "Hockey Stick Pro", category: "Hockey", image: "/hockey.png", price: 1899, originalPrice: 2299, rating: 4.9, reviews: 312, badge: "Hot", badgeColor: "red", slug: "hockey-stick-pro" },
-  { id: 6, name: "Size 5 Football", category: "Football", image: "/football.png", price: 899, originalPrice: 1099, rating: 4.4, reviews: 178, badge: undefined, badgeColor: undefined, slug: "size-5-football" },
-  { id: 7, name: "Willow Bat Lite", category: "Cricket", image: "/bat.png", price: 1299, originalPrice: 1499, rating: 4.3, reviews: 95, badge: "Sale", badgeColor: "orange", slug: "willow-bat-lite" },
-  { id: 8, name: "Street Skate Deck", category: "Skating", image: "/skate.png", price: 2199, originalPrice: 2799, rating: 4.6, reviews: 54, badge: undefined, badgeColor: undefined, slug: "street-skate-deck" },
-];
 
 type Props = {
   categories: Category[];
+  featuredProducts: FeaturedProduct[];
+  newArrivals: Product[];
+  bestSellers: Product[];
   categoryProducts?: CategoryWithProducts[];
 };
 
-export default function HomePage({ categories, categoryProducts }: Props) {
+export default function HomePage({ categories, featuredProducts, newArrivals, bestSellers, categoryProducts }: Props) {
   return (
     <main>
       <Hero />
-      <TopThree />
+      <TopThree products={featuredProducts} />
       <CategoryGrid
         eyebrow="Explore"
         title="Shop By Sport"
@@ -82,18 +73,22 @@ export default function HomePage({ categories, categoryProducts }: Props) {
         title="Exclusive Deals"
         offers={homeOffers}
       />
-      <ProductGrid
-        eyebrow="Just In"
-        title="New Arrivals"
-        viewAllLink="/products?sort=newest"
-        products={newArrivals}
-      />
-      <ProductGrid
-        eyebrow="Top Picks"
-        title="Best Sellers"
-        viewAllLink="/products?sort=bestsellers"
-        products={bestSellers}
-      />
+      {newArrivals.length > 0 && (
+        <ProductGrid
+          eyebrow="Just In"
+          title="New Arrivals"
+          viewAllLink="/products"
+          products={newArrivals}
+        />
+      )}
+      {bestSellers.length > 0 && (
+        <ProductGrid
+          eyebrow="Top Picks"
+          title="Best Sellers"
+          viewAllLink="/products"
+          products={bestSellers}
+        />
+      )}
 
       {/* ── Category Products with Alternating Layout ── */}
       {categoryProducts && categoryProducts.length > 0 && (

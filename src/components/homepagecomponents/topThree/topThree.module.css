@@ -317,29 +317,60 @@
 }
 
 /* =====================
-   CTA BUTTON
+   CTA ROW
 ===================== */
 
-.ctaBtn {
+.ctaRow {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.addCartBtn {
+  flex: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-top: 6px;
+  gap: 6px;
   padding: 11px 0;
-  width: 100%;
   background-color: var(--accent);
   color: #ffffff;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.5px;
   text-transform: uppercase;
   border-radius: 8px;
-  text-decoration: none;
+  border: none;
+  cursor: pointer;
   transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
-.ctaBtn:hover {
+.addCartBtn:hover {
   background-color: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+.ctaBtn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 11px 0;
+  background-color: transparent;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  border-radius: 8px;
+  border: 1.5px solid var(--accent);
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.ctaBtn:hover {
+  background-color: var(--accent);
+  color: #fff;
   transform: translateY(-1px);
 }
 
