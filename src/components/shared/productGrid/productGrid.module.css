@@ -78,8 +78,23 @@
 }
 
 /* =====================
+   COMPACT SECTION
+===================== */
+.sectionCompact {
+  width: 100%;
+  background: var(--bg-primary);
+}
+
+/* =====================
    GRID
 ===================== */
+.gridCompact {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  width: 100%;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -295,13 +310,15 @@
    RESPONSIVE
 ===================== */
 @media (max-width: 1024px) {
-  .grid {
+  .grid,
+  .gridCompact {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @media (max-width: 768px) {
-  .grid {
+  .grid,
+  .gridCompact {
     grid-template-columns: repeat(2, 1fr);
     gap: 14px;
   }

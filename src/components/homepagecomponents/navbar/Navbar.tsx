@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useTheme } from "@/context/ThemeContext";
+import { useCart } from "@/context/CartContext";
 import styles from "./navbar.module.css";
 
 export default function Navbar() {
@@ -11,6 +12,7 @@ export default function Navbar() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const { theme, toggleTheme } = useTheme();
+  const { totalItems } = useCart();
 
   // TODO: Replace with actual auth state from your auth system
   const isSignedIn = false;
@@ -87,7 +89,7 @@ export default function Navbar() {
           {/* Cart */}
           <Link href="/cart" className={styles.iconBtn} aria-label="Cart">
             <CartIcon />
-            <span className={styles.cartBadge}>0</span>
+            {totalItems > 0 && <span className={styles.cartBadge}>{totalItems}</span>}
           </Link>
 
           {/* Theme Toggle */}
@@ -174,7 +176,7 @@ export default function Navbar() {
           )}
           <Link href="/cart" className={styles.mobileCartLink} onClick={() => setIsMenuOpen(false)}>
             <CartIcon />
-            <span>Cart (0)</span>
+            <span>Cart ({totalItems})</span>
           </Link>
           <button className={styles.mobileThemeToggle} onClick={toggleTheme} aria-label="Toggle theme">
             {theme === "light" ? <MoonIcon /> : <SunIcon />}

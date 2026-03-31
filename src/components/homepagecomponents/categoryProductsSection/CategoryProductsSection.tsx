@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useCart } from "@/context/CartContext";
 import styles from "./categoryProductsSection.module.css";
 import type { Product } from "@/components/shared/productGrid/ProductGrid";
 
@@ -71,6 +72,20 @@ export default function CategoryProductsSection({ categoryProducts }: Props) {
 
 /* ─── Product Card ──── */
 function ProductCard({ product }: { product: Product }) {
+  const { addToCart } = useCart();
+
+  function handleAddToCart(e: React.MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    addToCart({
+      variant_id: String(product.id),
+      product_id: String(product.id),
+      product_name: product.name,
+      price: product.price,
+      image: product.image,
+    });
+  }
+
   const discount =
     product.originalPrice && product.originalPrice > product.price
       ? Math.round(
@@ -104,10 +119,10 @@ function ProductCard({ product }: { product: Product }) {
 
         {/* Hover overlay with quick-add */}
         <div className={styles.hoverOverlay}>
-          <span className={styles.quickAdd}>
+          <button className={styles.quickAdd} onClick={handleAddToCart}>
             <CartIcon />
             Add to Cart
-          </span>
+          </button>
         </div>
       </div>
 

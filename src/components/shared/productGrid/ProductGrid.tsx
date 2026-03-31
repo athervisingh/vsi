@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useCart } from "@/context/CartContext";
 import styles from "./productGrid.module.css";
 
 /* ─── Types ──────────────────────────────────────────── */
@@ -24,6 +25,7 @@ type Props = {
   title: string;
   viewAllLink?: string;
   products: Product[];
+  compact?: boolean;
 };
 
 /* ─── Section ────────────────────────────────────────── */
@@ -32,23 +34,26 @@ export default function ProductGrid({
   title,
   viewAllLink,
   products,
+  compact = false,
 }: Props) {
   return (
-    <section className={styles.section}>
-      <div className={styles.sectionHeader}>
-        <div className={styles.titleGroup}>
-          {eyebrow && <span className={styles.eyebrow}>{eyebrow}</span>}
-          <h2 className={styles.title}>{title}</h2>
+    <section className={compact ? styles.sectionCompact : styles.section}>
+      {!compact && (
+        <div className={styles.sectionHeader}>
+          <div className={styles.titleGroup}>
+            {eyebrow && <span className={styles.eyebrow}>{eyebrow}</span>}
+            <h2 className={styles.title}>{title}</h2>
+          </div>
+          {viewAllLink && (
+            <Link href={viewAllLink} className={styles.viewAll}>
+              View All
+              <ArrowRight />
+            </Link>
+          )}
         </div>
-        {viewAllLink && (
-          <Link href={viewAllLink} className={styles.viewAll}>
-            View All
-            <ArrowRight />
-          </Link>
-        )}
-      </div>
+      )}
 
-      <div className={styles.grid}>
+      <div className={compact ? styles.gridCompact : styles.grid}>
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
@@ -59,6 +64,20 @@ export default function ProductGrid({
 
 /* ─── Product Card ───────────────────────────────────── */
 function ProductCard({ product }: { product: Product }) {
+  const { addToCart } = useCart();
+
+  function handleAddToCart(e: React.MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    addToCart({
+      variant_id: String(product.id),
+      product_id: String(product.id),
+      product_name: product.name,
+      price: product.price,
+      image: product.image,
+    });
+  }
+
   const discount =
     product.originalPrice && product.originalPrice > product.price
       ? Math.round(
@@ -95,10 +114,10 @@ function ProductCard({ product }: { product: Product }) {
 
         {/* Hover overlay with quick-add */}
         <div className={styles.hoverOverlay}>
-          <span className={styles.quickAdd}>
+          <button className={styles.quickAdd} onClick={handleAddToCart}>
             <CartIcon />
             Add to Cart
-          </span>
+          </button>
         </div>
       </div>
 
