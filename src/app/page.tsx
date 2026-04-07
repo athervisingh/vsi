@@ -1,4 +1,4 @@
-import HomePage from "@/pages/HomePage";
+import HomePage from "@/views/HomePage";
 import { createServerClient } from "@/lib/supabase-server";
 import type { Category } from "@/types";
 import type { CategoryWithProducts } from "@/components/homepagecomponents/categoryProductsSection/CategoryProductsSection";
