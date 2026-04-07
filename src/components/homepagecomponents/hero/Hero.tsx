@@ -11,7 +11,7 @@ export default function Hero() {
       {/* Background image with zoom-out animation */}
       <div className={styles.bgWrapper}>
         <Image
-          src="/hero3.png"
+          src="/hero.png"
           alt="Virat Sports Industries"
           fill
           priority

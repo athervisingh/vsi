@@ -77,14 +77,25 @@ export default function CategoryGrid({
                 key={cat.id}
                 href={`/categories/${cat.slug}`}
                 className={styles.categoryGridCard}
+                style={!cat.image_url ? { background: PLACEHOLDER_COLORS[i % PLACEHOLDER_COLORS.length] } : undefined}
               >
                 {/* Background with gradient or image */}
-                <div
-                  className={styles.cardImage}
-                  style={{
-                    background: PLACEHOLDER_COLORS[i % PLACEHOLDER_COLORS.length],
-                  }}
-                />
+                {cat.image_url ? (
+                  <Image
+                    src={cat.image_url}
+                    alt={cat.name}
+                    fill
+                    className={styles.cardImage}
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                  />
+                ) : (
+                  <div
+                    className={styles.cardImage}
+                    style={{
+                      background: PLACEHOLDER_COLORS[i % PLACEHOLDER_COLORS.length],
+                    }}
+                  />
+                )}
 
                 {/* Content overlay */}
                 <div className={styles.cardOverlay} />
@@ -101,8 +112,6 @@ export default function CategoryGrid({
                   </span>
                 </div>
 
-                {/* Icon badge */}
-                <div className={styles.cardIcon}>{cat.name.charAt(0).toUpperCase()}</div>
               </Link>
             ))}
           </div>
