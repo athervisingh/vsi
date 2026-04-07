@@ -10,7 +10,7 @@ export default function SignInPage() {
   const { signIn } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect") ?? "/";
+  const redirect = searchParams?.get("redirect") ?? "/";
 
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState<string | null>(null);
