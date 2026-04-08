@@ -41,7 +41,7 @@ export default function ProfilePage() {
       .eq("id", user.id);
 
     setSaving(false);
-    if (error) { setError("Save nahi ho saka. Dobara try karein."); return; }
+    if (error) { setError("Failed to save profile. Please try again."); return; }
     await refreshProfile();
     setSaved(true);
     setTimeout(() => setSaved(false), 3000);
@@ -125,11 +125,11 @@ export default function ProfilePage() {
                     value={user.email ?? ""}
                     disabled
                   />
-                  <span className={styles.fieldHint}>Email change nahi ho sakta.</span>
+                  <span className={styles.fieldHint}>Email cannot be changed.</span>
                 </div>
 
                 {error && <p className={styles.errorMsg}>{error}</p>}
-                {saved && <p className={styles.successMsg}><CheckIcon /> Profile save ho gaya!</p>}
+                {saved && <p className={styles.successMsg}><CheckIcon /> Profile saved successfully.</p>}
 
                 <button type="submit" className={styles.saveBtn} disabled={saving}>
                   {saving ? <Spinner /> : "Save Changes"}

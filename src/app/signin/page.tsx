@@ -50,7 +50,7 @@ function SignInForm() {
       <div className={styles.card}>
         {/* Header */}
         <div className={styles.cardHeader}>
-          <div className={styles.logoMark}>VS</div>
+          <div className={styles.logoMark}>VSI</div>
           <h1 className={styles.title}>Welcome Back</h1>
           <p className={styles.subtitle}>Sign in to your Virat Sports account</p>
         </div>
@@ -96,7 +96,7 @@ function SignInForm() {
         </form>
 
         <p className={styles.switchText}>
-          Account nahi hai?{" "}
+          Don’t have an account?{" "}
           <Link href="/signup" className={styles.switchLink}>Sign Up</Link>
         </p>
       </div>

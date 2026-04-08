@@ -48,13 +48,12 @@ export default function SignUpPage() {
         <div className={styles.card}>
           <div className={styles.successBox}>
             <div className={styles.successIcon}><CheckIcon /></div>
-            <h2 className={styles.successTitle}>Account Ban Gaya!</h2>
+            <h2 className={styles.successTitle}>Your account has been created!</h2>
             <p className={styles.successText}>
-              Aapke email <strong>{form.email}</strong> par ek confirmation link bheja gaya hai.
-              Link click karke apna account verify karein, phir sign in karein.
+              confirmation link has been sent to your email <strong>{form.email}</strong> Please click the link to verify your account, then sign in.
             </p>
             <Link href="/signin" className={styles.submitBtn} style={{ textDecoration: "none", textAlign: "center" }}>
-              Sign In Page Par Jayein
+              Go to the Sign In Page
             </Link>
           </div>
         </div>
@@ -66,9 +65,9 @@ export default function SignUpPage() {
     <main className={styles.page}>
       <div className={styles.card}>
         <div className={styles.cardHeader}>
-          <div className={styles.logoMark}>VS</div>
+          <div className={styles.logoMark}>VSI</div>
           <h1 className={styles.title}>Create Account</h1>
-          <p className={styles.subtitle}>Virat Sports par join karein</p>
+          <p className={styles.subtitle}>Become a Part of Virat Sports</p>
         </div>
 
         <form onSubmit={handleSubmit} className={styles.form} noValidate>
@@ -79,7 +78,7 @@ export default function SignUpPage() {
               name="fullName"
               type="text"
               autoComplete="name"
-              placeholder="Aapka poora naam"
+              placeholder="Your full name"
               value={form.fullName}
               onChange={handleChange}
               className={styles.input}
@@ -107,7 +106,7 @@ export default function SignUpPage() {
               name="password"
               type="password"
               autoComplete="new-password"
-              placeholder="Kam se kam 6 characters"
+              placeholder="At least 6 characters"
               value={form.password}
               onChange={handleChange}
               className={styles.input}
@@ -121,7 +120,7 @@ export default function SignUpPage() {
               name="confirm"
               type="password"
               autoComplete="new-password"
-              placeholder="Password dobara enter karein"
+              placeholder="Enter password again"
               value={form.confirm}
               onChange={handleChange}
               className={styles.input}
@@ -136,7 +135,7 @@ export default function SignUpPage() {
         </form>
 
         <p className={styles.switchText}>
-          Pehle se account hai?{" "}
+          Already have an account?{" "}
           <Link href="/signin" className={styles.switchLink}>Sign In</Link>
         </p>
       </div>

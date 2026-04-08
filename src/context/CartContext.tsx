@@ -100,7 +100,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
               : i
           );
         }
-        return [...prev, { ...item, cart_item_id: 'temp', quantity }];
+        return [...prev, { ...item, cart_item_id: `temp-${item.variant_id}`, quantity }];
       });
 
       try {
@@ -130,7 +130,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         if (json.data?.id) {
           setItems((prev) =>
             prev.map((i) =>
-              i.variant_id === item.variant_id && i.cart_item_id === 'temp'
+              i.variant_id === item.variant_id && i.cart_item_id === `temp-${item.variant_id}`
                 ? { ...i, cart_item_id: json.data.id }
                 : i
             )
@@ -147,6 +147,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     async (cart_item_id: string) => {
       if (!user) return;
       setItems((prev) => prev.filter((i) => i.cart_item_id !== cart_item_id));
+      // Skip API call if item hasn't been saved to DB yet (still optimistic)
+      if (cart_item_id.startsWith('temp-')) return;
       await fetch(`/api/cart?cart_item_id=${cart_item_id}`, {
         method: 'DELETE',
         headers: { 'x-user-id': user.id },
@@ -167,6 +169,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
           i.cart_item_id === cart_item_id ? { ...i, quantity } : i
         )
       );
+      // Skip API call if item hasn't been saved to DB yet (still optimistic)
+      if (cart_item_id.startsWith('temp-')) return;
       await fetch('/api/cart', {
         method: 'PATCH',
         headers: authHeaders(user.id),

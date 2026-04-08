@@ -37,7 +37,7 @@ export default function CartPage() {
         <div className={styles.emptyBox}>
           <CartEmptyIcon />
           <h1 className={styles.emptyTitle}>Your Cart is Empty</h1>
-          <p className={styles.emptyDesc}>Koi bhi item cart mein nahi hai. Products dekhne ke liye home page par jayein.</p>
+          <p className={styles.emptyDesc}>Your cart is empty. Go to the home page to browse products.</p>
           <Link href="/" className={styles.shopBtn}>Shop Now</Link>
         </div>
       </main>
@@ -116,7 +116,7 @@ export default function CartPage() {
                   <input
                     className={styles.couponInput}
                     type="text"
-                    placeholder="Enter code (e.g. CRICKET20)"
+                    placeholder="Enter Code"
                     value={couponInput}
                     onChange={(e) => { setCouponInput(e.target.value.toUpperCase()); setCouponError(null); }}
                     onKeyDown={(e) => e.key === "Enter" && handleApplyCoupon()}

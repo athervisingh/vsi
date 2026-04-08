@@ -7,7 +7,7 @@
 .section {
   width: 100%;
   padding: 80px 24px;
-  background: var(--bg-secondary);
+  background: linear-gradient( 135deg, #0f172a 10%, #204d97 40%, #0f172a 87% );
   transition: background 0.3s ease;
 }
 
@@ -20,7 +20,7 @@
   gap: 0;
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: var(--card-shadow-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(32, 77, 151, 0.3);
   animation: fadeInUp 0.7s ease-out both;
 }
 
@@ -128,12 +128,14 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: var(--bg-secondary);
-  border: 1px solid #d1d5db;
+  background:#1d4283 50%;
+  border: 1px solid rgba(32, 77, 151, 0.4);
   z-index: 3;
 }
 .notchTop    { top: -14px; }
-.notchBottom { bottom: -14px; }
+.notchBottom { bottom: -14px;
+background:#0f1f3b 50%;
+}
 
 /* Diagonal COUPON ribbon */
 .ribbon {
