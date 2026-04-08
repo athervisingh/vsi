@@ -9,6 +9,7 @@ import {
   ReactNode,
 } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { validateCoupon, type Coupon } from '@/lib/coupons';
 
 type CartItem = {
   cart_item_id: string;
@@ -25,6 +26,11 @@ type CartContextType = {
   totalItems: number;
   totalPrice: number;
   cartLoading: boolean;
+  appliedCoupon: Coupon | null;
+  discountAmount: number;
+  finalPrice: number;
+  applyCoupon: (code: string) => { success: boolean; error?: string };
+  removeCoupon: () => void;
   addToCart: (item: Omit<CartItem, 'quantity' | 'cart_item_id'>, quantity?: number) => Promise<void>;
   removeFromCart: (cart_item_id: string) => Promise<void>;
   updateQuantity: (cart_item_id: string, quantity: number) => Promise<void>;
@@ -41,6 +47,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
   const [items, setItems] = useState<CartItem[]>([]);
   const [cartLoading, setCartLoading] = useState(false);
+  const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(null);
 
   // Load cart from DB when user logs in
   useEffect(() => {
@@ -178,12 +185,36 @@ export function CartProvider({ children }: { children: ReactNode }) {
     });
   }, [user]);
 
+  const applyCoupon = useCallback(
+    (code: string): { success: boolean; error?: string } => {
+      const totalPrice = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
+      const result = validateCoupon(code, totalPrice);
+      if (!result.valid) return { success: false, error: result.error };
+      setAppliedCoupon(result.coupon);
+      return { success: true };
+    },
+    [items]
+  );
+
+  const removeCoupon = useCallback(() => {
+    setAppliedCoupon(null);
+  }, []);
+
   const totalItems = items.reduce((sum, i) => sum + i.quantity, 0);
   const totalPrice = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
+  const discountAmount = appliedCoupon
+    ? Math.round((totalPrice * appliedCoupon.discount) / 100)
+    : 0;
+  const finalPrice = totalPrice - discountAmount;
 
   return (
     <CartContext.Provider
-      value={{ items, totalItems, totalPrice, cartLoading, addToCart, removeFromCart, updateQuantity, clearCart }}
+      value={{
+        items, totalItems, totalPrice, cartLoading,
+        appliedCoupon, discountAmount, finalPrice,
+        applyCoupon, removeCoupon,
+        addToCart, removeFromCart, updateQuantity, clearCart,
+      }}
     >
       {children}
     </CartContext.Provider>

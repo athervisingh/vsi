@@ -1,20 +1,21 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import styles from "./offersSection.module.css";
 
-/* ─── Types ──────────────────────────────────────────── */
 export type Offer = {
   id: number;
-  tag: string;          // e.g. "Flash Sale", "Weekend Deal"
-  discount: string;     // e.g. "30%", "₹500", "Buy 1 Get 1"
-  discountSuffix?: string; // e.g. "OFF", "FREE" — defaults to "OFF"
-  heading: string;      // e.g. "Cricket Gear"
+  tag: string;
+  discount: string;
+  discountSuffix?: string;
+  heading: string;
+  subheading?: string;
   description: string;
   image: string;
   ctaText?: string;
   ctaLink?: string;
+  couponCode?: string;
   color?: "orange" | "blue" | "green" | "red";
 };
 
@@ -24,7 +25,6 @@ type Props = {
   offers: Offer[];
 };
 
-/* ─── Section ────────────────────────────────────────── */
 export default function OffersSection({
   eyebrow = "Limited Time",
   title = "Exclusive Deals",
@@ -32,81 +32,119 @@ export default function OffersSection({
 }: Props) {
   return (
     <section className={styles.section}>
-      <div className={styles.header}>
-        <span className={styles.eyebrow}>{eyebrow}</span>
-        <h2 className={styles.title}>{title}</h2>
-        <div className={styles.titleLine} />
-      </div>
+      <div className={styles.wrapper}>
 
-      <div className={styles.grid}>
-        {offers.map((offer) => (
-          <OfferCard key={offer.id} offer={offer} />
-        ))}
+        {/* ── Left Panel ── */}
+        <div className={styles.leftPanel}>
+          <span className={styles.eyebrow}>{eyebrow}</span>
+          <h2 className={styles.panelTitle}>{title}</h2>
+          <p className={styles.panelSub}>
+            Use coupon codes at checkout and save on your favourite sports gear.
+          </p>
+          <Link href="/products" className={styles.shopBtn}>
+            Shop Now
+            <ArrowRight />
+          </Link>
+        </div>
+
+        {/* ── Coupons ── */}
+        <div className={styles.coupons}>
+          {offers.map((offer) => (
+            <CouponCard key={offer.id} offer={offer} />
+          ))}
+        </div>
+
       </div>
     </section>
   );
 }
 
-/* ─── Card ───────────────────────────────────────────── */
-function OfferCard({ offer }: { offer: Offer }) {
-  const color = offer.color ?? "orange";
+function CouponCard({ offer }: { offer: Offer }) {
+  const [copied, setCopied] = useState(false);
+
+  function handleCopy() {
+    if (!offer.couponCode) return;
+    navigator.clipboard.writeText(offer.couponCode).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }
 
   return (
-    <div className={`${styles.card} ${styles[`card_${color}`]}`}>
+    <div className={styles.coupon}>
+      {/* Notch circles */}
+      <div className={styles.notchTop} />
+      <div className={styles.notchBottom} />
 
-      {/* ── Top: colored band with discount + image ── */}
-      <div className={`${styles.cardTop} ${styles[`top_${color}`]}`}>
-
-        {/* Tag badge */}
-        <span className={styles.tag}>{offer.tag}</span>
-
-        {/* Discount block */}
-        <div className={styles.discountBlock}>
-          <span className={styles.discount}>{offer.discount}</span>
-          <span className={styles.discountSuffix}>
-            {offer.discountSuffix ?? "OFF"}
-          </span>
-        </div>
-
-        <p className={styles.description}>{offer.description}</p>
-
-        {/* Product image — floats right */}
-        <div className={styles.imageWrapper}>
-          <Image
-            src={offer.image}
-            alt={offer.heading}
-            width={160}
-            height={160}
-            className={styles.image}
-          />
-        </div>
+      {/* Diagonal ribbon */}
+      <div className={styles.ribbon}>
+        <span className={styles.ribbonText}>COUPON</span>
       </div>
 
-      {/* ── Bottom: heading + CTA ── */}
-      <div className={styles.cardBottom}>
-        <div className={styles.bottomLeft}>
-          <span className={styles.heading}>{offer.heading}</span>
+      {/* Dashed separator */}
+      <div className={styles.separator} />
+
+      {/* Content */}
+      <div className={styles.couponContent}>
+
+        <div className={styles.discountRow}>
+          <span className={styles.upTo}>UP TO</span>
+          <span className={styles.discountBig}>{offer.discount}</span>
+          <span className={styles.offLabel}>{offer.discountSuffix ?? "OFF"}</span>
         </div>
+
+        <p className={styles.condition}>{offer.description}</p>
+
+        <div className={styles.useCodeRow}>
+          <span className={styles.useCodeLabel}>USE CODE</span>
+        </div>
+
+        {offer.couponCode && (
+          <div className={styles.codePill}>
+            <span className={styles.codeText}>{offer.couponCode}</span>
+            <button
+              className={`${styles.copyBtn} ${copied ? styles.copied : ""}`}
+              onClick={handleCopy}
+              aria-label="Copy code"
+            >
+              {copied ? <CheckIcon /> : <CopyIcon />}
+            </button>
+          </div>
+        )}
+
         <Link
           href={offer.ctaLink ?? "/products"}
-          className={`${styles.ctaBtn} ${styles[`cta_${color}`]}`}
+          className={styles.cardLink}
         >
-          {offer.ctaText ?? "Shop Now"}
-          <ArrowRight />
+          {offer.ctaText ?? "Shop Now"} →
         </Link>
       </div>
-
     </div>
   );
 }
 
 function ArrowRight() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" strokeWidth="2.5"
-      strokeLinecap="round" strokeLinejoin="round">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
       <line x1="5" y1="12" x2="19" y2="12" />
       <polyline points="12 5 19 12 12 19" />
+    </svg>
+  );
+}
+
+function CopyIcon() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2" />
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+    </svg>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="20 6 9 17 4 12" />
     </svg>
   );
 }

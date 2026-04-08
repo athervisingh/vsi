@@ -133,6 +133,27 @@
   gap: 10px;
 }
 
+@media (max-width: 600px) {
+  .pageHeader {
+    padding: 28px 16px 20px;
+  }
+
+  .categoryHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 28px 0 4px;
+  }
+
+  .categoryNav {
+    padding: 0 16px;
+  }
+
+  .categorySection {
+    padding: 0 16px;
+  }
+}
+
 /* ── Empty State ── */
 .emptyState {
   text-align: center;

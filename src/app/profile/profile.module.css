@@ -28,6 +28,32 @@
 
 @media (max-width: 768px) {
   .layout { grid-template-columns: 1fr; }
+
+  .page { padding: 24px 12px 60px; }
+
+  .sidebar {
+    position: static;
+  }
+
+  .sideNav {
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 4px 8px;
+    gap: 4px;
+    scrollbar-width: none;
+  }
+
+  .sideNav::-webkit-scrollbar { display: none; }
+
+  .sideLink,
+  .sideLinkDanger {
+    flex-shrink: 0;
+    white-space: nowrap;
+    padding: 10px 14px;
+    border-top: none;
+    margin-top: 0;
+    border-radius: 8px;
+  }
 }
 
 /* ── Sidebar ── */

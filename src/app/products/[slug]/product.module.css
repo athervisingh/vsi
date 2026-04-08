@@ -62,7 +62,40 @@
 }
 
 @media (max-width: 900px) {
-  .imageCol { position: static; }
+  .imageCol {
+    position: static;
+    flex-direction: column-reverse;
+  }
+
+  .thumbnails {
+    flex-direction: row;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .thumbnails::-webkit-scrollbar { display: none; }
+
+  .breadcrumb {
+    padding: 16px 16px 0;
+  }
+
+  .productSection {
+    padding: 20px 16px 0;
+  }
+
+  .lowerSection {
+    padding: 0 16px;
+    margin-top: 32px;
+  }
+
+  .ctaRow {
+    flex-direction: column;
+  }
+
+  .addToCartBtn,
+  .buyNowBtn {
+    width: 100%;
+  }
 }
 
 .thumbnails {

@@ -420,7 +420,7 @@
   }
 
   .productsGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 12px;
   }
 
@@ -434,6 +434,12 @@
     transform: translateY(0);
     font-size: 11px;
     padding: 8px 14px;
+  }
+}
+
+@media (max-width: 380px) {
+  .productsGrid {
+    grid-template-columns: 1fr;
   }
 }
 
